@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Task Manager
+Comment=Manage your tasks and daily plans
+Exec=/path/to/your/TaskManager
+Icon=/path/to/your/project/resources/app_icon.png
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupWMClass=TaskManager

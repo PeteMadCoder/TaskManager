@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "qstandarditemmodel": "cpp",
+        "qsortfilterproxymodel": "cpp",
+        "qpushbutton": "cpp",
+        "chrono": "cpp",
+        "qstyleditemdelegate": "cpp",
+        "new": "cpp",
+        "qfiledialog": "cpp"
+    }
+}
