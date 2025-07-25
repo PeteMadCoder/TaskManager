@@ -373,8 +373,8 @@ void MainWindow::setupUI() {
     itemLayout->addWidget(new QLabel("Plan Items:"));
     
     todoItemView = new QTableView(itemPanel);
-    todoItemModel = new QStandardItemModel(0, 5, this);
-    todoItemModel->setHorizontalHeaderLabels({"Title", "Priority", "Duration", "Status", ""});
+    todoItemModel = new QStandardItemModel(0, 4, this);
+    todoItemModel->setHorizontalHeaderLabels({"Title", "Priority", "Duration", "Status"});
     todoItemView->setModel(todoItemModel);
     todoItemView->setSelectionBehavior(QAbstractItemView::SelectRows);
     todoItemView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -382,9 +382,8 @@ void MainWindow::setupUI() {
     // Improve table appearance
     todoItemView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     todoItemView->setColumnWidth(1, 80);
-    todoItemView->setColumnWidth(2, 80);
+    todoItemView->setColumnWidth(2, 80); 
     todoItemView->setColumnWidth(3, 100);
-    todoItemView->setColumnWidth(4, 40);
     
     todoItemView->setStyleSheet(
         "QTableView { background-color: white; border: 1px solid #d0d0d0; border-radius: 4px; }"
@@ -969,11 +968,7 @@ void MainWindow::loadTODOItemsForList(const QModelIndex &index) {
         }
         rowItems << titleItem;
         
-        // Description
-        QString shortDesc = item.description.length() > 50 
-                          ? item.description.left(47) + "..." 
-                          : item.description;
-        rowItems << new QStandardItem(shortDesc);
+        // REMOVED DESCRIPTION COLUMN
         
         // Priority
         QStandardItem* priorityItem = new QStandardItem(priorityNames.value(item.priority, "None"));
@@ -1001,7 +996,12 @@ void MainWindow::loadTODOItemsForList(const QModelIndex &index) {
         todoItemModel->appendRow(rowItems);
     }
     
-    //todoItemView->resizeColumnsToContents();
+    // Adjust column widths
+    todoItemView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    todoItemView->setColumnWidth(1, 80);  // Priority
+    todoItemView->setColumnWidth(2, 80);  // Duration
+    todoItemView->setColumnWidth(3, 100); // Status
+    
     updatePlanStatus();
 }
 
@@ -1477,10 +1477,11 @@ void MainWindow::deleteTODOItem() {
     QStandardItem* idItem = todoItemModel->item(row, 0);
     int itemId = idItem->data().toInt();
 
-    QString description = todoItemModel->item(row, 1)->text();
+    // Get title from first column (was column 1 before)
+    QString title = todoItemModel->item(row, 0)->text();
 
     int ret = QMessageBox::question(this, "Delete Item", 
-                                  QString("Are you sure you want to delete '%1'?").arg(description),
+                                  QString("Are you sure you want to delete '%1'?").arg(title),
                                   QMessageBox::Yes | QMessageBox::No);
     
     if (ret == QMessageBox::Yes) {
